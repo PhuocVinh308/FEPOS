@@ -1,0 +1,74 @@
+.margin-space {
+  margin-top: 80px;
+}
+.app {
+  background-color: #090e28;
+}
+.fillter,
+.tableOder {
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 1;
+  transition: all ease-in-out 0.2s;
+}
+.fillter:hover,
+.tableOder:hover {
+  opacity: 0.6;
+}
+.cardList {
+  background-color: #1a1776 !important;
+  color: white !important;
+}
+.card-combo {
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+.card-combo:hover {
+  filter: brightness(90%);
+}
+.fillter {
+  backdrop-filter: brightness(0.7);
+}
+.author-footer {
+  position: fixed;
+  bottom: 0;
+  right: 50%;
+  opacity: 0.4;
+}
+.author-footer > p {
+  font-size: 13px;
+}
+.logout-btn,
+.logout-btn > path {
+  color: #ff5630 !important;
+}
+
+@media (max-width: 767px) {
+  .totalOder {
+    display: none;
+  }
+
+  .totalOder.show {
+    display: block;
+  }
+  nav > div > .nav-drawer_icon {
+    display: block;
+  }
+}
+@media (max-width: 991px) {
+  .totalOder {
+    min-width: 224px !important;
+  }
+}
+.alert-custom {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  z-index: 4900 !important;
+}
+.loadding {
+  z-index: 5000 !important;
+}
+.css-1ytlwq5-MuiAlert-icon > .css-1vooibu-MuiSvgIcon-root > path {
+  color: #fff;
+}

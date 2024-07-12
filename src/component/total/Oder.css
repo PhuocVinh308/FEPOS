@@ -1,0 +1,93 @@
+.blackColor,
+.blackColor > path {
+  color: #050a19 !important;
+}
+.totalOder {
+  position: fixed;
+  top: 68px;
+  right: 0;
+  bottom: 0;
+  min-width: 23%;
+
+  background-color: #090e28;
+  border: 1px solid #000;
+}
+.orderContent {
+  overflow-y: scroll;
+  padding: 0;
+  height: 61vh;
+}
+
+.total {
+  left: 0;
+  position: absolute;
+  bottom: 0;
+  border: 1px solid #000;
+}
+
+.totalNav {
+  background-color: #090e28 !important;
+  border: 1px solid #000;
+  color: white !important;
+}
+.totalTableList {
+  position: absolute;
+  right: 0;
+  top: 58px;
+  width: 100%;
+  z-index: 1;
+  background-color: #146dcc;
+  list-style: none;
+  border-radius: 25px;
+  padding: 0 32px;
+}
+.totalTableItem {
+  cursor: pointer;
+  padding: 8px;
+  border-bottom: 1px solid #050a19;
+  transition: all ease 0.3s;
+}
+.totalTableItem:hover {
+  opacity: 0.6;
+}
+.totalIconArrow {
+  transition: all ease 0.3s;
+  cursor: pointer;
+  filter: brightness(70%);
+}
+.total-divideIcon {
+  background-color: #2b32b2;
+  height: 30px;
+  width: 36px;
+  border-radius: 5px;
+  transition: all ease 0.3s;
+}
+.total-divideIcon:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+.totalIconArrow:hover {
+  filter: brightness(100%);
+}
+.deleteListProduct {
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 10px;
+  filter: brightness(70%);
+  transition: all ease 0.3s;
+}
+.deleteListProduct:hover {
+  filter: brightness(100%);
+}
+.sumTotal {
+  font-weight: bold;
+}
+.orderContent-inputChange {
+  background-color: transparent;
+  border: none;
+}
+/* ghi đè material */
+
+label > .css-ahj2mt-MuiTypography-root {
+  font-size: 12px;
+}
