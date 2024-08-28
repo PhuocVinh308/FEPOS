@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../chat/FirebaseConfig";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -39,17 +38,10 @@ function Login() {
     axios
       .post(`${API_BASE_URL}Token`, loginData)
       .then((loginResponse) => {
-        // Lưu token vào localStorage
         const token = loginResponse.data;
         localStorage.removeItem("authToken");
         localStorage.setItem("authToken", token);
         localStorage.setItem("userName", loginData.username);
-        signInWithEmailAndPassword(
-          auth,
-          `${loginData.username}@gmail.com`,
-          loginData.password
-        );
-
         setShowAlert(true);
         setAlertSeverity("success");
         setAlertMessage("Đăng nhập thành công!");

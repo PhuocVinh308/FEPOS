@@ -12,9 +12,7 @@ import {
 import Notification from "../../../../notification/Notification";
 import Loadding from "../../../../loadding/Loadding";
 import { LinkAPI } from "../../../../LinkAPI";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../../chat/FirebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+
 
 const API_BASE_URL = "http://localhost:8080/auth/";
 
@@ -73,20 +71,8 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
         return;
       }
 
-      const res = await createUserWithEmailAndPassword(
-        auth,
-        `${userData.username}@gmail.com`,
-        userData.password
-      );
-      console.log(res);
-      await setDoc(doc(db, "users", res.user.uid), {
-        uid: res.user.uid,
-        username: userData.username,
-      });
-
-      // create empty user chats on firestore
-      await setDoc(doc(db, "userChats", res.user.uid), {});
-      axios.post(`${API_BASE_URL}addNewUser`, userData);
+      await axios.post(`${API_BASE_URL}addNewUser`, userData);
+      setPermissionUserData(userData);
       setUserData({
         username: "",
         password: "",
@@ -94,11 +80,10 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
       });
       setTimeout(() => {
         setLoading(false);
-
-        setPermissionUserData(userData);
         setShowAlert(true);
         setAlertSeverity("success");
         setAlertMessage("Cấp tài khoản thành công!");
+
         onClose();
       });
     } catch (error) {
@@ -108,6 +93,8 @@ const PermissionModal = ({ open, onClose, setPermissionUserData }) => {
       setAlertMessage("Xảy ra lỗi khi cấp tài khoản!");
     }
   };
+
+
 
   return (
     <Dialog open={open} onClose={onClose}>

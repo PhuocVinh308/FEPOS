@@ -21,7 +21,9 @@ function ProductList() {
 
   const getLocalImageUrl = (localPath) => {
     try {
-      return require(`../../images${localPath.split("images")[1]}`);
+      const convertPath = !!localPath ? localPath.replaceAll("\\","/") : "";
+      console.log(convertPath)
+      return !convertPath?  "https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg" : require(`../../../images${convertPath.split("images")[1]}`);
     } catch (error) {
       console.error("Error loading local image:", error);
     }
@@ -172,11 +174,10 @@ function ProductList() {
               style={{
                 width: "100%",
                 height: "12rem",
-                backgroundImage: `url('${getLocalImageUrl(
-                  product.linkLocal
-                )}')`,
-                backgroundSize: "contain",
+                backgroundImage: `url('http://localhost:8080/img/${product.linkLocal}')`,
                 backgroundRepeat: "no-repeat",
+                backgroundSize: "contain",
+                backgroundPosition: "center",
                 color: "white",
               }}
             >

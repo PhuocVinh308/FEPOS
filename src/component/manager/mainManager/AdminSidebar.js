@@ -79,6 +79,16 @@ function AdminSidebar({ openSidebarToggle, OpenSidebar }) {
             <LocalOfferIcon className="icon" /> Gợi ý
           </li>
         </NavLink>
+
+        <NavLink
+          className="sidebar-link"
+          to="/shift"
+          activeClassName="active-link"
+        >
+          <li className="sidebar-list-item">
+            <LocalOfferIcon className="icon" /> Xếp ca
+          </li>
+        </NavLink>
       </ul>
     </aside>
   );

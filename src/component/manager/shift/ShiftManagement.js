@@ -17,14 +17,9 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import { visuallyHidden } from "@mui/utils";
 import axios from "axios";
 import { LinkAPI } from "../../../LinkAPI";
-import Modal from "./emloyeeModal/ModalAddUser";
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -55,65 +50,28 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "employeeId",
+    id: "id",
     numeric: false,
     disablePadding: true,
     label: "ID",
   },
   {
-    id: "fullName",
+    id: "name",
     numeric: false,
     disablePadding: false,
-    label: "Họ tên",
-  },
-
-  {
-    id: "gender",
-    numeric: false,
-    disablePadding: false,
-    label: "Giới tính",
+    label: "Họ và tên",
   },
   {
-    id: "address",
+    id: "phone_number",
     numeric: false,
     disablePadding: false,
-    label: "Địa chỉ",
+    label: "Số Điện Thoại",
   },
   {
-    id: "cccd",
+    id: "point",
     numeric: false,
     disablePadding: false,
-    label: "CCCD",
-  },
-  {
-    id: "phoneNumber",
-    numeric: false,
-    disablePadding: false,
-    label: "SĐT",
-  },
-  {
-    id: "position",
-    numeric: false,
-    disablePadding: false,
-    label: "Vị trí công việc",
-  },
-  {
-    id: "salary",
-    numeric: false,
-    disablePadding: false,
-    label: "Mức lương",
-  },
-  {
-    id: "account",
-    numeric: false,
-    disablePadding: false,
-    label: "Tên đăng nhâp",
-  },
-  {
-    id: "dob",
-    numeric: false,
-    disablePadding: false,
-    label: "Ngày sinh",
+    label: "Tích Điểm",
   },
 ];
 
@@ -140,7 +98,7 @@ function EnhancedTableHead(props) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              "aria-label": "select all employees",
+              "aria-label": "select all customers",
             }}
           />
         </TableCell>
@@ -209,7 +167,7 @@ function EnhancedTableToolbar(props) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} Đã chọn
+          {numSelected} selected
         </Typography>
       ) : (
         <Typography
@@ -219,20 +177,14 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Thông tin nhân viên
+          Thông tin khách hàng
         </Typography>
       )}
 
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Tooltip title="Delete">
           <IconButton onClick={onDelete}>
             <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -247,12 +199,11 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("employeeId");
+  const [orderBy, setOrderBy] = React.useState("id");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rows, setRows] = React.useState([]);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const localizationText = {
     vi: {
       display: (from, to, count) => `${from}–${to} của ${count}`,
@@ -262,12 +213,15 @@ export default function EnhancedTable() {
     async function fetchData() {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await axios.get(`${LinkAPI}employees`, {
+        const response = await axios.get(`${LinkAPI}customers`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setRows(response.data);
+        const filterDataCustomer = response.data.filter(
+          (data) => data.name !== "Khách lẻ"
+        );
+        setRows(filterDataCustomer);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -282,18 +236,11 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.employeeId);
+      const newSelected = rows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
-  };
-
-  const handleAddEmployee = () => {
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   const handleClick = (event, id) => {
@@ -345,7 +292,7 @@ export default function EnhancedTable() {
         const token = localStorage.getItem("authToken");
         await Promise.all(
           selected.map(async (id) => {
-            await axios.delete(`${LinkAPI}employees/${selected}`, {
+            await axios.delete(`${LinkAPI}customers/${selected}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -355,7 +302,6 @@ export default function EnhancedTable() {
         const updatedRows = rows.filter((row) => !selected.includes(row.id));
         setRows(updatedRows);
         setSelected([]);
-        window.location.reload();
       } catch (error) {
         console.error("Error deleting data:", error);
       }
@@ -365,25 +311,6 @@ export default function EnhancedTable() {
   return (
     <Box className="main-container" sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <Box
-          className="me-2"
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            mb: 1,
-            pt: 3,
-          }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-            onClick={handleAddEmployee}
-          >
-            Thêm nhân viên
-          </Button>
-          <Modal open={isModalOpen} onClose={closeModal}></Modal>
-        </Box>
         <EnhancedTableToolbar
           numSelected={selected.length}
           onDelete={handleDelete}
@@ -400,54 +327,48 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.employeeId);
+                const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  row.account !== "admin" && (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.employeeId)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.employeeId}
-                      selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
+                  <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, row.id)}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.id}
+                    selected={isItemSelected}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {index+1}
-                      </TableCell>
-                      <TableCell>{row.fullName}</TableCell>
-                      <TableCell>{row.gender}</TableCell>
-                      <TableCell>
-                        {row.address ? row.address.slice(0, 10) + "..." : ""}
-                      </TableCell>
-                      <TableCell>{row.cccd}</TableCell>
-                      <TableCell>{row.phoneNumber}</TableCell>
-                      <TableCell>{row.position}</TableCell>
-                      <TableCell>{row.salary}k</TableCell>
-                      <TableCell>{row.account}</TableCell>
-                      <TableCell>{row.dob}</TableCell>
-                    </TableRow>
-                  )
+                      {index + 1}
+                    </TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.phoneNumber}</TableCell>
+                    <TableCell>
+                      {row.name === "Khách lẻ" ? null : row.point}
+                    </TableCell>
+                  </TableRow>
                 );
               })}
               {emptyRows > 0 && (
                 <TableRow>
-                  <TableCell colSpan={10}>Không có dữ liệu</TableCell>
+                  <TableCell colSpan={7} />
                 </TableRow>
               )}
             </TableBody>

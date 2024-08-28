@@ -69,7 +69,7 @@ function Nav() {
   }, [navigate, userName]);
 
   const handleGetHTML = () => {
-    fetch(`${LinkAPI}orders/xuatHTML`, {
+    fetch(`${LinkAPI}orders/xuatPDF`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

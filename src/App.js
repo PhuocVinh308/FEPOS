@@ -31,7 +31,7 @@ function App() {
     currentPath === "/tableManagement" ||
     currentPath === "/employeeManagement" ||
     currentPath === "/suggestCombo" ||
-    currentPath === "/productManagement/binProduct";
+    currentPath === "/productManagement/binProduct" || currentPath === "/shift";
   const isStaf =
     currentPath === "/tableList" ||
     currentPath === "/productlist" ||
@@ -49,9 +49,9 @@ function App() {
         </Routes>
       </div>
       <div>
-        <Routes>
+        {/* <Routes>
           <Route path="/shifts" element={<Shifts />} />
-        </Routes>
+        </Routes> */}
       </div>
 
       <div>
@@ -108,6 +108,8 @@ function App() {
               element={<BinProduct />}
             />
             <Route path="/suggestCombo" element={<SuggestCombo />} />
+            <Route path="/shift" element={<CustomerManagement />} />
+
           </Routes>
         </div>
       </div>

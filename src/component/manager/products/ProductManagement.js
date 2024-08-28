@@ -185,7 +185,8 @@ function Admin() {
 
   const getLocalImageUrl = (localPath) => {
     try {
-      return require(`../../../images${localPath.split("images")[1]}`);
+      const convertPath = !!localPath ? localPath.replaceAll("\\","/") : "";
+      return !convertPath?  "https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg" : "http://localhost:8080/img/"+convertPath;
     } catch (error) {
       console.error("Error loading local image:", error);
     }
